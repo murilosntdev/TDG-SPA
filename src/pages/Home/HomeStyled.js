@@ -15,3 +15,17 @@ export const Main = styled.main`
     min-height: 100vh;
     padding: 6rem 2rem 2rem;
 `
+
+export const Text = styled.p`
+    color: ${props => props.theme.colors.secondary};
+    font-size: ${props => props.theme.fontSizes.medium};
+    margin: auto;
+    text-align: center;
+`
+
+export const Section = styled.section`
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 2rem;
+`

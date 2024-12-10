@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Inpt = styled.input`
-    border: none;
+    border: ${props => props.$hasError ? `0.15rem solid ${props.theme.colors.danger}` : "none"};
     border-radius: 0.6rem;
     font-size: 1.4rem;
     height: 2.5rem;

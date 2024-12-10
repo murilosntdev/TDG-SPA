@@ -2,7 +2,7 @@ import { Tltp } from "./TooltipStyled"
 
 export const PasswordTooltip = (props) => {
     return (
-        <Tltp id={props.id}>
+        <Tltp id={props.id + "-tooltip"}>
             A senha deve conter:
             <ul id="list">
                 <li>De 8 a 15 caracteres</li>

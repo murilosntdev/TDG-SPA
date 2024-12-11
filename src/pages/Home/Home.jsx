@@ -6,8 +6,11 @@ import * as S from "./HomeStyled";
 import api from "../../services/api";
 import { Popup } from "../../components/Popup/Popup";
 import translateInputName from "../../services/inputNameTranslator"
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+    const navigate = useNavigate();
+
     const [newAccountFormData, setNewAccountFormData] = useState({});
     const [newAccountFormInputsErrors, setNewAccountFormInputsErrors] = useState({
         username: { active: false, message: '' },
@@ -123,7 +126,16 @@ const Home = () => {
         setLoginButtonLoading(true);
 
         try {
-            await api.post('session/login', data);
+            await api.post('session/login', data, { withCredentials: true }).then(response => {
+                setLoginButtonLoading(false);
+
+                setLoginFormData({
+                    username: '',
+                    password: ''
+                });
+
+                navigate(`/${response.data.details.account_info.username}`)
+            });
         } catch (error) {
             const status = error.response.data.error.status;
             const details = error.response.data.error.details;

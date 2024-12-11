@@ -63,6 +63,10 @@ const Home = () => {
             setNewAccontButtonLoading(false);
 
             switch (status) {
+                case 409: {
+                    show409Error(details);
+                    break;
+                };
                 case 422: {
                     showInputErrors(details);
                     break;
@@ -120,6 +124,24 @@ const Home = () => {
                 setNewAccountFormInputsErrors(updatedInputsErrors);
             });
         });
+    };
+
+    function show409Error(details) {
+        const updatedInputsErrors = {
+            username: { active: false, message: '' },
+            email: { active: false, message: '' },
+            password: { active: false, message: '' },
+            confirmPassword: { active: false, message: '' }
+        };
+
+        if (details.includes("username")) {
+            updatedInputsErrors["username"] = { ...updatedInputsErrors["username"], active: true, message: details };
+        };
+        if (details.includes("email")) {
+            updatedInputsErrors["email"] = { ...updatedInputsErrors["email"], active: true, message: details };
+        };
+
+        setNewAccountFormInputsErrors(updatedInputsErrors);
     };
 
     return (

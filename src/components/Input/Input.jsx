@@ -10,7 +10,7 @@ export const FormInput = (props) => {
             placeholder={props.placeholder}
             required={props.required}
             onChange={props.onChange}
-            $hasError={props.inputsErrors[props.name].active}
+            $hasError={props.$inputsErrors[props.name].active}
         />
     );
 };
@@ -23,6 +23,6 @@ export const InputLabel = (props) => {
 
 export const InputSpan = (props) => {
     return (
-        <InptSpn id={props.id + "-span"}>{props.inputsErrors[props.name].message}</InptSpn>
+        <InptSpn id={props.id + "-span"}>{props.$inputsErrors[props.name].message}</InptSpn>
     );
 };

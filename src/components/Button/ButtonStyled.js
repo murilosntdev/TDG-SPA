@@ -9,6 +9,7 @@ export const Bttn = styled.button`
     font-size: ${props => props.theme.fontSizes.medium};
     height: 2.5rem;
     justify-content: center;
+    pointer-events: ${props => props.$loading ? "none" : "auto"};
 `
 
 export const ScBttn = styled(Bttn)`

@@ -43,7 +43,7 @@ export const NewAccountForm = (props) => {
                     {...props}
                 />
             </Fldst>
-            <SecondaryButton>Criar Conta</SecondaryButton>
+            <SecondaryButton id="create-account-button" {...props}>Criar Conta</SecondaryButton>
         </NwAccntFrm>
     );
 };

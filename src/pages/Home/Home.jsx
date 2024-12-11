@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Footer } from "../../components/Footer/Footer";
 import { NewAccountForm } from "../../components/Form/Form";
 import Navbar from "../../components/Navbar/Navbar";
-import * as S from "./HomeStyled"
+import * as S from "./HomeStyled";
+import api from "../../services/api";
+import { Popup } from "../../components/Popup/Popup";
 
 const Home = () => {
     const [newAccountFormData, setNewAccountFormData] = useState({});
@@ -12,6 +14,12 @@ const Home = () => {
         password: { active: false, message: '' },
         confirmPassword: { active: false, message: '' }
     });
+    const [newAccountButtonLoading, setNewAccontButtonLoading] = useState(false);
+    const [popupStatus, setPopupStatus] = useState(false);
+    const [popupInfos, setPopupInfos] = useState({
+        type: '',
+        content: ''
+    });
 
     function handleNewAccountFormInputChange(event) {
         const inputName = event.target.name;
@@ -20,7 +28,7 @@ const Home = () => {
         setNewAccountFormData({ ...newAccountFormData, [inputName]: inputValue });
     };
 
-    function handleNewAccountFormSubmit(event) {
+    async function handleNewAccountFormSubmit(event) {
         event.preventDefault();
 
         setNewAccountFormInputsErrors({
@@ -36,6 +44,31 @@ const Home = () => {
             showDiffetentPasswordsError();
             return;
         };
+
+        const data = {
+            username,
+            email,
+            password
+        };
+
+        setNewAccontButtonLoading(true);
+
+        try {
+            await api.post('account/new', data);
+        } catch (error) {
+            const status = error.response.data.error.status;
+            const details = error.response.data.error.details;
+
+            setNewAccontButtonLoading(false);
+
+            switch (status) {
+                default: {
+                    setPopupInfos({ type: "danger", content: "Não foi possível concluir o cadastro de sua conta. Por favor, tente novemente mais tarde." });
+                    togglePopup(true);
+                    break;
+                };
+            };
+        };
     };
 
     function showDiffetentPasswordsError() {
@@ -49,9 +82,23 @@ const Home = () => {
         setNewAccountFormInputsErrors(updatedInputsErrors);
     };
 
+    function togglePopup(newState) {
+        setPopupStatus(newState);
+
+        const timeout = setTimeout(() => {
+            setPopupStatus(false);
+        }, 5000);
+
+        return () => clearTimeout(timeout);
+    };
+
     return (
         <S.HomePage id="home-page">
             <Navbar />
+            <Popup
+                $status={popupStatus}
+                $infos={popupInfos}
+            />
             <S.Main id="main">
                 <S.Text id="presentation-text">
                     Bem-vindo ao Truco da Galera! Preparado para começar o jogo?<br />Cadastre-se agora ou faça login para entrar na diversão!
@@ -61,7 +108,8 @@ const Home = () => {
                         title="Crie sua conta"
                         onChange={handleNewAccountFormInputChange}
                         onSubmit={handleNewAccountFormSubmit}
-                        inputsErrors={newAccountFormInputsErrors}
+                        $inputsErrors={newAccountFormInputsErrors}
+                        $loading={newAccountButtonLoading}
                     />
                 </S.Section>
             </S.Main>

@@ -4,6 +4,7 @@ export const FormInput = (props) => {
     return (
         <Inpt
             type={props.type}
+            value={props.$values[props.name] || ''}
             name={props.name}
             id={props.id + "-input"}
             spellCheck={props.spellCheck}

@@ -55,7 +55,19 @@ const Home = () => {
         setNewAccontButtonLoading(true);
 
         try {
-            await api.post('account/new', data);
+            await api.post('account/new', data).then(response => {
+                setNewAccontButtonLoading(false);
+
+                setPopupInfos({ type: "success", content: "Conta criada com sucesso. Faça login para continuar." });
+                togglePopup(true);
+
+                setNewAccountFormData({
+                    username: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: ''
+                });
+            });
         } catch (error) {
             const status = error.response.data.error.status;
             const details = error.response.data.error.details;
@@ -160,6 +172,7 @@ const Home = () => {
                         title="Crie sua conta"
                         onChange={handleNewAccountFormInputChange}
                         onSubmit={handleNewAccountFormSubmit}
+                        $values={newAccountFormData}
                         $inputsErrors={newAccountFormInputsErrors}
                         $loading={newAccountButtonLoading}
                     />

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { ScBttn } from "../Button/ButtonStyled";
 
 export const Nvbr = styled.nav`
     align-items: center;
@@ -11,6 +12,10 @@ export const Nvbr = styled.nav`
     position: fixed;
     top: 0;
     width: 100vw;
+
+    ${ScBttn} {
+        width: 8rem;
+    }
 `
 
 export const Lnk = styled(Link)`

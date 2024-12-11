@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import * as S from "./HomeStyled";
 import api from "../../services/api";
 import { Popup } from "../../components/Popup/Popup";
+import translateInputName from "../../services/inputNameTranslator"
 
 const Home = () => {
     const [newAccountFormData, setNewAccountFormData] = useState({});
@@ -62,6 +63,10 @@ const Home = () => {
             setNewAccontButtonLoading(false);
 
             switch (status) {
+                case 422: {
+                    showInputErrors(details);
+                    break;
+                };
                 default: {
                     setPopupInfos({ type: "danger", content: "Não foi possível concluir o cadastro de sua conta. Por favor, tente novemente mais tarde." });
                     togglePopup(true);
@@ -90,6 +95,31 @@ const Home = () => {
         }, 5000);
 
         return () => clearTimeout(timeout);
+    };
+
+    function showInputErrors(details) {
+        const updatedInputsErrors = {
+            username: { active: false, message: '' },
+            email: { active: false, message: '' },
+            password: { active: false, message: '' },
+            confirmPassword: { active: false, message: '' }
+        };
+
+        details.forEach(detail => {
+            Object.entries(detail).forEach(([key, value]) => {
+                if (key === "username") {
+                    updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: translateInputName(value, 'username', 'nome de usuário') };
+                };
+                if (key === "email") {
+                    updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: value };
+                };
+                if (key === "password") {
+                    updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: translateInputName(value, 'password', 'senha') };
+                };
+
+                setNewAccountFormInputsErrors(updatedInputsErrors);
+            });
+        });
     };
 
     return (

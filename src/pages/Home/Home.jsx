@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Footer } from "../../components/Footer/Footer";
-import { NewAccountForm } from "../../components/Form/Form";
+import { LoginForm, NewAccountForm } from "../../components/Form/Form";
 import Navbar from "../../components/Navbar/Navbar";
 import * as S from "./HomeStyled";
 import api from "../../services/api";
@@ -16,6 +16,12 @@ const Home = () => {
         confirmPassword: { active: false, message: '' }
     });
     const [newAccountButtonLoading, setNewAccontButtonLoading] = useState(false);
+    const [loginFormData, setLoginFormData] = useState({});
+    const [loginFormInputsErrors, setLoginFormInputsErrors] = useState({
+        username: { active: false, message: '' },
+        password: { active: false, message: '' }
+    });
+    const [loginButtonLoading, setLoginButtonLoading] = useState(false);
     const [popupStatus, setPopupStatus] = useState(false);
     const [popupInfos, setPopupInfos] = useState({
         type: '',
@@ -27,6 +33,13 @@ const Home = () => {
         const inputValue = event.target.value;
 
         setNewAccountFormData({ ...newAccountFormData, [inputName]: inputValue });
+    };
+
+    function handleLoginFormInputChange(event) {
+        const inputName = event.target.name;
+        const inputValue = event.target.value;
+
+        setLoginFormData({ ...loginFormData, [inputName]: inputValue });
     };
 
     async function handleNewAccountFormSubmit(event) {
@@ -80,11 +93,54 @@ const Home = () => {
                     break;
                 };
                 case 422: {
-                    showInputErrors(details);
+                    showNewAccountFormInputErrors(details);
                     break;
                 };
                 default: {
                     setPopupInfos({ type: "danger", content: "Não foi possível concluir o cadastro de sua conta. Por favor, tente novemente mais tarde." });
+                    togglePopup(true);
+                    break;
+                };
+            };
+        };
+    };
+
+    async function loginFormSubmit(event) {
+        event.preventDefault();
+
+        setLoginFormInputsErrors({
+            username: { active: false, message: '' },
+            password: { active: false, message: '' }
+        });
+
+        const { username, password } = loginFormData;
+
+        const data = {
+            username,
+            password
+        };
+
+        setLoginButtonLoading(true);
+
+        try {
+            await api.post('session/login', data);
+        } catch (error) {
+            const status = error.response.data.error.status;
+            const details = error.response.data.error.details;
+
+            setLoginButtonLoading(false);
+
+            switch (status) {
+                case 401: {
+                    show401Error(details);
+                    break;
+                };
+                case 422: {
+                    showLoginFormInputErrors(details);
+                    break;
+                };
+                default: {
+                    setPopupInfos({ type: "danger", content: "Não foi possível realizar o login. Por favor, tente novemente mais tarde." });
                     togglePopup(true);
                     break;
                 };
@@ -113,7 +169,7 @@ const Home = () => {
         return () => clearTimeout(timeout);
     };
 
-    function showInputErrors(details) {
+    function showNewAccountFormInputErrors(details) {
         const updatedInputsErrors = {
             username: { active: false, message: '' },
             email: { active: false, message: '' },
@@ -133,9 +189,43 @@ const Home = () => {
                     updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: translateInputName(value, 'password', 'senha') };
                 };
 
-                setNewAccountFormInputsErrors(updatedInputsErrors);
             });
         });
+
+        setNewAccountFormInputsErrors(updatedInputsErrors);
+    };
+
+    function showLoginFormInputErrors(details) {
+        const updatedInputsErrors = {
+            username: { active: false, message: '' },
+            password: { active: false, message: '' }
+        };
+
+        details.forEach(detail => {
+            Object.entries(detail).forEach(([key, value]) => {
+                if (key === "username") {
+                    updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: translateInputName(value, 'username', 'nome de usuário') };
+                };
+                if (key === "password") {
+                    updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: translateInputName(value, 'password', 'senha') };
+                };
+
+            });
+        });
+
+        setLoginFormInputsErrors(updatedInputsErrors);
+    };
+
+    function show401Error(detail) {
+        const updatedInputError = {
+            username: { active: false, message: '' },
+            password: { active: false, message: '' }
+        }
+
+        updatedInputError['username'] = { ...updatedInputError['username'], active: true, message: '' };
+        updatedInputError['password'] = { ...updatedInputError['password'], active: true, message: detail };
+
+        setLoginFormInputsErrors(updatedInputError);
     };
 
     function show409Error(details) {
@@ -175,6 +265,14 @@ const Home = () => {
                         $values={newAccountFormData}
                         $inputsErrors={newAccountFormInputsErrors}
                         $loading={newAccountButtonLoading}
+                    />
+                    <LoginForm
+                        title="Acesse sua conta"
+                        onChange={handleLoginFormInputChange}
+                        onSubmit={loginFormSubmit}
+                        $values={loginFormData}
+                        $inputsErrors={loginFormInputsErrors}
+                        $loading={loginButtonLoading}
                     />
                 </S.Section>
             </S.Main>

@@ -1,7 +1,7 @@
 import { SecondaryButton } from "../Button/Button";
 import { FormInput, InputLabel, InputSpan } from "../Input/Input";
 import { PasswordTooltip } from "../Tooltip/Tooltip";
-import { Fldst, FldWthTlTp, FrmFld, Lgnd, NwAccntFrm, TlTpIcn } from "./FormStyled";
+import { Fldst, FldWthTlTp, FrmFld, Lgnd, LgnFrm, NwAccntFrm, TlTpIcn } from "./FormStyled";
 
 export const NewAccountForm = (props) => {
     return (
@@ -45,6 +45,34 @@ export const NewAccountForm = (props) => {
             </Fldst>
             <SecondaryButton id="create-account-button" {...props}>Criar Conta</SecondaryButton>
         </NwAccntFrm>
+    );
+};
+
+export const LoginForm = (props) => {
+    return (
+        <LgnFrm id="login-form" onSubmit={props.onSubmit}>
+            <Lgnd id="login-form-legend">{props.title}</Lgnd>
+            <Fldst id="login-form-fieldset">
+                <FormField
+                    id="login-form-username"
+                    name="username"
+                    lText="Nome de Usuário"
+                    type="text"
+                    spellCheck="false"
+                    required
+                    {...props}
+                />
+                <FormField
+                    id="login-form-password"
+                    name="password"
+                    lText="Senha"
+                    type="password"
+                    required
+                    {...props}
+                />
+            </Fldst>
+            <SecondaryButton id="login-button" {...props}>Entrar</SecondaryButton>
+        </LgnFrm>
     );
 };
 

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Inpt } from "../Input/InputStyled";
 
 export const Frm = styled.form`
     background-color: ${props => props.theme.colors.primary};
@@ -10,7 +11,11 @@ export const Frm = styled.form`
 `
 
 export const NwAccntFrm = styled(Frm)`
-        margin: 0 2rem;
+    margin: 0 2rem;
+`
+
+export const LgnFrm = styled(Frm)`
+    margin: 0 2rem;
 `
 
 export const Lgnd = styled.legend`
@@ -26,6 +31,10 @@ export const FrmFld = styled.div`
     display: flex;
     flex-direction: column;
     margin: 0.5rem 0;
+
+    ${Inpt} {
+        margin: 0.1rem 0;
+    }
 `
 
 export const FldWthTlTp = styled.div`

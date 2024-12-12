@@ -3,7 +3,7 @@ import { Footer } from "../../components/Footer/Footer";
 import { LoginForm, NewAccountForm } from "../../components/Form/Form";
 import Navbar from "../../components/Navbar/Navbar";
 import * as S from "./HomeStyled";
-import api from "../../services/api";
+import { api } from "../../services/api";
 import { Popup } from "../../components/Popup/Popup";
 import translateInputName from "../../services/inputNameTranslator"
 import { useNavigate } from "react-router-dom";

@@ -7,7 +7,7 @@ const MainRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/:username" element={<Dashboard />} />
+            <Route path="/u/:username" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

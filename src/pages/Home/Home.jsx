@@ -134,7 +134,7 @@ const Home = () => {
                     password: ''
                 });
 
-                navigate(`/${response.data.details.account_info.username}`)
+                navigate(`/u/${response.data.details.account_info.username}`);
             });
         } catch (error) {
             const status = error.response.data.error.status;

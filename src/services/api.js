@@ -4,13 +4,14 @@ export const api = axios.create({
     baseURL: process.env.REACT_APP_API_BASE_URL
 });
 
-export async function authFetch(endpoint, { method = "GET", data = null, headers = {}, navigate } = {}) {
+export async function authFetch(endpoint, { method = "GET", data = null, params = null, headers = {}, navigate } = {}) {
     const createConfig = () => ({
         method,
         url: endpoint,
         headers,
         withCredentials: true,
-        ...(data && { data })
+        ...(data && { data }),
+        ...(params && { params })
     });
 
     try {

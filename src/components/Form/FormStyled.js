@@ -18,6 +18,10 @@ export const LgnFrm = styled(Frm)`
     margin: 0 2rem;
 `
 
+export const CrtRmFrm = styled(Frm)`
+    width: 30rem;
+`
+
 export const Lgnd = styled.legend`
     color: ${props => props.theme.colors.secondary};
     font-size: ${props => props.theme.fontSizes.large};

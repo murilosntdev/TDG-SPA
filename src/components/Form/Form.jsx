@@ -1,7 +1,7 @@
 import { SecondaryButton } from "../Button/Button";
 import { FormInput, InputLabel, InputSpan } from "../Input/Input";
 import { PasswordTooltip } from "../Tooltip/Tooltip";
-import { Fldst, FldWthTlTp, FrmFld, Lgnd, LgnFrm, NwAccntFrm, TlTpIcn } from "./FormStyled";
+import { CrtRmFrm, Fldst, FldWthTlTp, FrmFld, Lgnd, LgnFrm, NwAccntFrm, TlTpIcn } from "./FormStyled";
 
 export const NewAccountForm = (props) => {
     return (
@@ -73,6 +73,26 @@ export const LoginForm = (props) => {
             </Fldst>
             <SecondaryButton id="login-button" {...props}>Entrar</SecondaryButton>
         </LgnFrm>
+    );
+};
+
+export const CreateRoomForm = (props) => {
+    return (
+        <CrtRmFrm id="create-room-form" onSubmit={props.onSubmit}>
+            <Lgnd id="create-room-form-legend">{props.title}</Lgnd>
+            <Fldst id="create-room-form-fieldset">
+                <FormField
+                    id="create-room-form-roomName"
+                    name="roomName"
+                    lText="Nome da Sala"
+                    type="text"
+                    spellCheck="false"
+                    required
+                    {...props}
+                />
+            </Fldst>
+            <SecondaryButton id="create-room-button" {...props}>Criar Sala</SecondaryButton>
+        </CrtRmFrm>
     );
 };
 

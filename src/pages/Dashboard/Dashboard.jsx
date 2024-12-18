@@ -4,9 +4,9 @@ import Navbar from "../../components/Navbar/Navbar";
 import * as S from "./DashboardStyles"
 import { api, authFetch } from "../../services/api";
 import { useCallback, useEffect, useState } from "react";
-import { connectSocket, createRoom, disconnectSocket } from "../../services/ws";
+import { connectSocket, createRoom, disconnectSocket, findRooms } from "../../services/ws";
 import { SecondaryButton } from "../../components/Button/Button";
-import { Modal } from "../../components/Modal/Modal";
+import { CreateRoomModal, FindRoomsModal } from "../../components/Modal/Modal";
 import { Popup } from "../../components/Popup/Popup";
 import translateInputName from "../../services/inputNameTranslator";
 
@@ -26,7 +26,9 @@ const Dashboard = () => {
     }, [navigate]);
 
     const [showCreateRoomModal, setShowCreateRoomModal] = useState(false);
+    const [showFindRoomsModal, setShowFindRoomsModal] = useState(false);
     const [createRoomFormData, setCreateRoomFormData] = useState({});
+    const [foundRooms, setFoundRooms] = useState('');
     const [createRoomFormInputsErrors, setCreateRoomFormInputsErrors] = useState({
         roomName: { active: false, message: '' }
     });
@@ -154,6 +156,26 @@ const Dashboard = () => {
         setCreateRoomFormInputsErrors(updatedInputsErrors);
     };
 
+    async function handleFindRooms() {
+        try {
+            await findRooms().then((response) => {
+                const formattedRooms = response.details.map((room) => ({
+                    id: room.id,
+                    name: room.name,
+                    players: room.players
+                }));
+
+                setFoundRooms(formattedRooms);
+                setShowFindRoomsModal(true);
+            });
+        } catch (error) {
+            setPopupInfos({ type: "danger", content: "Não foi possível buscar salas. Por favor, tente novemente mais tarde." });
+            togglePopup(true);
+            setShowFindRoomsModal(false);
+            return;
+        };
+    };
+
     return (
         <S.DashboardPage>
             <Navbar
@@ -164,7 +186,7 @@ const Dashboard = () => {
                 $status={popupStatus}
                 $infos={popupInfos}
             />
-            <Modal
+            <CreateRoomModal
                 show={showCreateRoomModal}
                 close={closeCreateRoomModal}
                 onChange={handleCreateRoomFormInputChange}
@@ -173,8 +195,14 @@ const Dashboard = () => {
                 inputError={createRoomFormInputsErrors}
                 loading={createRoomFormLoading}
             />
+            <FindRoomsModal
+                show={showFindRoomsModal}
+                close={() => setShowFindRoomsModal(false)}
+                rooms={foundRooms}
+            />
             <S.Main>
                 <SecondaryButton onClick={() => setShowCreateRoomModal(true)}>Criar Sala</SecondaryButton>
+                <SecondaryButton onClick={handleFindRooms}>Buscar Salas</SecondaryButton>
             </S.Main>
             <Footer />
         </S.DashboardPage>

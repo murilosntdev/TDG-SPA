@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ScBttn } from "../Button/ButtonStyled";
 
 export const Ovrly = styled.div`
   align-items: center;
@@ -36,4 +37,40 @@ export const ClsBttn = styled.button`
 
 export const MdlCntnt = styled.div`
   display: flex;
+  flex-direction: column;
 `;
+
+export const Lgnd = styled.h1`
+  color: ${props => props.theme.colors.secondary};
+  font-size: ${props => props.theme.fontSizes.large};
+  margin-bottom: 0.5rem;
+`
+
+export const RmsLst = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  ${ScBttn} {
+    align-items: first baseline;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    margin: 0.5rem;
+    min-width: 15rem;
+    padding: 0.5rem;
+  }
+`
+
+export const RmNm = styled.h1`
+  font-size: ${props => props.theme.fontSizes.extraLarge};
+`
+
+export const RmPlyrs = styled.h2`
+  font-size: ${props => props.theme.fontSizes.medium};
+  text-align: end;
+  width: 100%;
+`
+
+export const RmId = styled.h3`
+  font-size: ${props => props.theme.fontSizes.small};
+`

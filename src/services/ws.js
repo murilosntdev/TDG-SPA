@@ -85,3 +85,21 @@ export const createRoom = (data) => {
         });
     });
 };
+
+export const findRooms = () => {
+    return new Promise((resolve, reject) => {
+        if (!socket || !socket.connected) {
+            connectSocket().catch((error) => {
+                reject(error);
+            });
+
+            return;
+        };
+
+        socket.emit("findRooms");
+
+        socket.on("rooms", (message) => {
+            resolve(message);
+        });
+    });
+};

@@ -129,3 +129,25 @@ export const joinRoom = (data) => {
         });
     });
 };
+
+export const leaveRoom = (data) => {
+    return new Promise((resolve, reject) => {
+        if (!socket || !socket.connected) {
+            connectSocket().catch((error) => {
+                reject(error);
+            });
+
+            return;
+        };
+
+        socket.emit("leaveRoom", data);
+
+        socket.on("roomLeft", (message) => {
+            resolve(message);
+        });
+
+        socket.on("error", (error) => {
+            reject(error);
+        });
+    });
+};

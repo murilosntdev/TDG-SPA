@@ -9,6 +9,7 @@ const Navbar = (props) => {
                 <LgImg id="tdg-isoLogo" src={isoLogo} alt="IsoLogo Truco da Galera" />
             </Lnk>
             {props.action === "logout" ? <SecondaryButton id="logout-button" onClick={props.onClick}>Sair</SecondaryButton> : ''}
+            {props.action === "leaveRoom" ? <SecondaryButton id="leaveRoom-button" onClick={props.onClick}>Sair da Sala</SecondaryButton> : ''}
         </Nvbr>
     );
 };

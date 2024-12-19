@@ -61,6 +61,7 @@ export const disconnectSocket = () => {
     if (socket) {
         socket.disconnect();
         socket = null;
+        connectingPromise = false;
     };
 };
 

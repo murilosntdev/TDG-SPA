@@ -57,7 +57,6 @@ const Dashboard = () => {
                 await estabilishConnection();
             } else {
                 handleLogout();
-                navigate("/");
             };
         };
 
@@ -66,12 +65,30 @@ const Dashboard = () => {
                 await connectSocket();
             } catch (error) {
                 handleLogout();
-                navigate("/");
             };
         };
 
         getAccountInfo();
     }, [navigate, handleLogout]);
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            event.returnValue = "";
+        };
+
+        const handleUnload = () => {
+            disconnectSocket();
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        window.addEventListener("unload", handleUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            window.removeEventListener("unload", handleUnload);
+        };
+    }, []);
 
     function handleCreateRoomFormInputChange(event) {
         const inputName = event.target.name;

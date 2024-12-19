@@ -1,10 +1,32 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
-import { leaveRoom } from "../../services/ws";
+import { connectSocket, disconnectSocket, leaveRoom } from "../../services/ws";
 import * as S from "./GameRoomStyled"
+import { useEffect } from "react";
 
 const GameRoom = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        connectSocket();
+
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            event.returnValue = "";
+        };
+
+        const handleUnload = () => {
+            disconnectSocket();
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        window.addEventListener("unload", handleUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            window.removeEventListener("unload", handleUnload);
+        };
+    }, []);
 
     async function handleLeaveRoom() {
         const path = window.location.pathname;

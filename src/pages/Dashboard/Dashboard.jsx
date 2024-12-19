@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import * as S from "./DashboardStyles"
 import { api, authFetch } from "../../services/api";
 import { useCallback, useEffect, useState } from "react";
-import { connectSocket, createRoom, disconnectSocket, findRooms } from "../../services/ws";
+import { connectSocket, createRoom, disconnectSocket, findRooms, joinRoom } from "../../services/ws";
 import { SecondaryButton } from "../../components/Button/Button";
 import { CreateRoomModal, FindRoomsModal } from "../../components/Modal/Modal";
 import { Popup } from "../../components/Popup/Popup";
@@ -176,6 +176,24 @@ const Dashboard = () => {
         };
     };
 
+    async function handleJoinRoom(event) {
+        const data = {
+            room_id: event.currentTarget.id
+        };
+
+        try {
+            await joinRoom(data).then((response) => {
+                const roomId = response.details.room_info.id;
+                navigate(`/r/${roomId}`);
+            });
+        } catch (error) {
+            setPopupInfos({ type: "danger", content: "Não foi possível entrar na sala. Por favor, tente novemente mais tarde." });
+            togglePopup(true);
+            setShowFindRoomsModal(false);
+            return;
+        };
+    };
+
     return (
         <S.DashboardPage>
             <Navbar
@@ -199,6 +217,7 @@ const Dashboard = () => {
                 show={showFindRoomsModal}
                 close={() => setShowFindRoomsModal(false)}
                 rooms={foundRooms}
+                onClick={handleJoinRoom}
             />
             <S.Main>
                 <SecondaryButton onClick={() => setShowCreateRoomModal(true)}>Criar Sala</SecondaryButton>

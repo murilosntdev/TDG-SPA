@@ -29,7 +29,7 @@ export const FindRoomsModal = (props) => {
 
     const renderRooms = () => {
         return props.rooms.map((room) => (
-            <SecondaryButton key={room.id}>
+            <SecondaryButton id={room.id} onClick={props.onClick}>
                 <RmNm>
                     {room.name}
                 </RmNm>

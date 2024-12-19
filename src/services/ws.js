@@ -101,5 +101,31 @@ export const findRooms = () => {
         socket.on("rooms", (message) => {
             resolve(message);
         });
+
+        socket.on("error", (error) => {
+            reject(error);
+        });
+    });
+};
+
+export const joinRoom = (data) => {
+    return new Promise((resolve, reject) => {
+        if (!socket || !socket.connected) {
+            connectSocket().catch((error) => {
+                reject(error);
+            });
+
+            return;
+        };
+
+        socket.emit("joinRoom", data);
+
+        socket.on("roomJoined", (message) => {
+            resolve(message);
+        });
+
+        socket.on("error", (error) => {
+            reject(error);
+        });
     });
 };

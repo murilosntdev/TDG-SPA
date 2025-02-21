@@ -1,7 +1,7 @@
 import { SecondaryButton } from "../Button/Button";
-import { FormInput, InputLabel, InputSpan } from "../Input/Input";
+import { FormBasicInput, FormInput, InputLabel, InputSpan } from "../Input/Input";
 import { PasswordTooltip } from "../Tooltip/Tooltip";
-import { CrtRmFrm, Fldst, FldWthTlTp, FrmFld, Lgnd, LgnFrm, NwAccntFrm, TlTpIcn } from "./FormStyled";
+import { CrtRmFrm, Fldst, FldWthTlTp, FrmFld, HndsPrdctnFrm, Lgnd, LgnFrm, NwAccntFrm, TlTpIcn } from "./FormStyled";
 
 export const NewAccountForm = (props) => {
     return (
@@ -93,6 +93,22 @@ export const CreateRoomForm = (props) => {
             </Fldst>
             <SecondaryButton id="create-room-button" {...props}>Criar Sala</SecondaryButton>
         </CrtRmFrm>
+    );
+};
+
+export const HandPredictionForm = (props) => {
+    return (
+        <HndsPrdctnFrm onSubmit={props.onSubmitPredictions}>
+            <FormBasicInput
+                name="handPrediction"
+                type="number"
+                placeholder="quantidade de mãos"
+                min="0"
+                max="20"
+                {...props}
+            />
+            <SecondaryButton>Confirmar</SecondaryButton>
+        </HndsPrdctnFrm>
     );
 };
 

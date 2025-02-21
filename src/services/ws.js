@@ -152,3 +152,161 @@ export const leaveRoom = (data) => {
         });
     });
 };
+
+export const startGame = (data) => {
+    return new Promise((resolve, reject) => {
+        if (!socket || !socket.connected) {
+            connectSocket().catch((error) => {
+                reject(error);
+            });
+
+            return;
+        };
+
+        socket.emit("startGame", data);
+
+        socket.on("gameStarted", (message) => {
+            resolve(message);
+        });
+
+        socket.on("error", (error) => {
+            reject(error);
+        });
+    });
+};
+
+export const handsPrediction = (data) => {
+    return new Promise((resolve, reject) => {
+        if (!socket || !socket.connected) {
+            connectSocket().catch((error) => {
+                reject(error);
+            });
+
+            return;
+        };
+
+        socket.emit("handsPrediction", data);
+
+        socket.on("handsPredicted", (message) => {
+            resolve(message);
+        });
+
+        socket.on("error", (error) => {
+            reject(error);
+        });
+    });
+};
+
+export const playCard = (data) => {
+    return new Promise((resolve, reject) => {
+        if (!socket || !socket.connected) {
+            connectSocket().catch((error) => {
+                reject(error);
+            });
+
+            return;
+        };
+
+        socket.emit("playCard", data);
+
+        socket.on("cardPlayed", (message) => {
+            resolve(message);
+        });
+
+        socket.on("error", (error) => {
+            reject(error);
+        });
+    });
+};
+
+export const onPlayerJoined = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("playerJoined", callback);
+};
+
+export const onPlayerLeft = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("playerLeft", callback);
+};
+
+export const onGameStarted = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("gameStarted", callback);
+};
+
+export const onReceiveCards = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("receiveCards", callback);
+};
+
+export const onNextMove = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("nextMove", callback);
+};
+
+export const onHandsPredicted = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("handsPredicted", callback);
+};
+
+export const onCardPlayed = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("cardPlayed", callback);
+};
+
+export const onHandWinners = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("handWinners", callback);
+
+    return () => {
+        socket.off("handWinners", callback);
+    };
+};
+
+export const onLivesLost = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("livesLost", callback);
+
+    return () => {
+        socket.off("livesLost", callback);
+    };
+};
+
+export const onGameWinner = (callback) => {
+    if (!socket || !socket.connected) {
+        throw new Error("Websocket não está conectado.");
+    };
+
+    socket.on("gameWinner", callback);
+
+    return () => {
+        socket.off("gameWinner", callback);
+    };
+};

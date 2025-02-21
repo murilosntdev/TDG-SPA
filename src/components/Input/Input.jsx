@@ -16,6 +16,19 @@ export const FormInput = (props) => {
     );
 };
 
+export const FormBasicInput = (props) => {
+    return (
+        <Inpt
+            type={props.type}
+            name={props.name}
+            placeholder={props.placeholder}
+            min={props.min}
+            max={props.max}
+            onChange={props.onChangePredictions}
+        />
+    );
+};
+
 export const InputLabel = (props) => {
     return (
         <InptLbl id={props.id + "-label"} htmlFor={props.id + "-input"}>{props.lText}</InptLbl>

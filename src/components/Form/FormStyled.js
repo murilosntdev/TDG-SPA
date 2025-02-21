@@ -22,6 +22,16 @@ export const CrtRmFrm = styled(Frm)`
     width: 30rem;
 `
 
+export const HndsPrdctnFrm = styled(Frm)`
+    display: flex;
+    flex-direction: row;
+
+    ${Inpt} {
+        margin: 0 1rem 0 0;
+        width: 16rem;
+    }
+`
+
 export const Lgnd = styled.legend`
     color: ${props => props.theme.colors.secondary};
     font-size: ${props => props.theme.fontSizes.large};

@@ -201,7 +201,7 @@ const Dashboard = () => {
         try {
             await joinRoom(data).then((response) => {
                 const roomId = response.details.room_info.id;
-                navigate(`/r/${roomId}`);
+                navigate(`/r/${roomId}`, { state: response.details });
             });
         } catch (error) {
             setPopupInfos({ type: "danger", content: "Não foi possível entrar na sala. Por favor, tente novemente mais tarde." });

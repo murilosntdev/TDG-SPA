@@ -6,3 +6,9 @@ export const SecondaryButton = (props) => {
         <ScBttn {...props}>{props.$loading === true ? <LoadingCircle /> : props.children}</ScBttn>
     );
 };
+
+export const GameStartButton = (props) => {
+    return (
+        <ScBttn onClick={props.onClick}>Iniciar Jogo</ScBttn>
+    );
+}

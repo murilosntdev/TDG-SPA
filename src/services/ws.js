@@ -1,5 +1,4 @@
 import { io } from "socket.io-client";
-import { getCookie } from "./cookies";
 
 let socket = null;
 let reconnectAttempts = 0;
@@ -29,12 +28,8 @@ export const connectSocket = () => {
                 }));
             };
 
-            const bearerToken = getCookie("bearer_token");
-
             socket = io(process.env.REACT_APP_API_BASE_URL, {
-                query: {
-                    bearer_token: bearerToken
-                },
+                withCredentials: true,
                 transports: ["websocket"],
                 reconnection: false
             });

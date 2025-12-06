@@ -14,7 +14,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const handleLogout = useCallback(async () => {
         try {
-            await api.post('/session/logout', {}, { withCredentials: true });
+            await api.post('/auth/logout', {}, { withCredentials: true });
             sessionStorage.clear();
             disconnectSocket();
             navigate("/");

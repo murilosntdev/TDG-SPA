@@ -22,7 +22,7 @@ export async function authFetch(endpoint, { method = "GET", data = null, params 
 
         if (status === 401) {
             try {
-                await api.post("/session/refreshToken", {}, { withCredentials: true });
+                await api.post("/auth/refreshToken", {}, { withCredentials: true });
 
                 const response = await api(createConfig());
                 return (response.data);

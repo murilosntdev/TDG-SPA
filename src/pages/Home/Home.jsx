@@ -126,7 +126,7 @@ const Home = () => {
         setLoginButtonLoading(true);
 
         try {
-            await api.post('session/login', data, { withCredentials: true }).then(response => {
+            await api.post('auth/login', data, { withCredentials: true }).then(response => {
                 setLoginButtonLoading(false);
 
                 setLoginFormData({

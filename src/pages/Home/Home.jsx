@@ -274,7 +274,6 @@ const Home = () => {
                 if (key === "password") {
                     updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: translateInputName(value, 'password', 'senha') };
                 };
-
             });
         });
 
@@ -295,7 +294,6 @@ const Home = () => {
                 if (key === "password") {
                     updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: translateInputName(value, 'password', 'senha') };
                 };
-
             });
         });
 

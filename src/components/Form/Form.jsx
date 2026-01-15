@@ -2,7 +2,7 @@ import { SecondaryButton } from "../Button/Button";
 import { FormBasicInput, FormInput, InputLabel, InputSpan } from "../Input/Input";
 import { Link } from "../Link/Link";
 import { PasswordTooltip } from "../Tooltip/Tooltip";
-import { CrtRmFrm, Fldst, FldWthTlTp, FrmFld, HndsPrdctnFrm, Lgnd, LgnFrm, NwAccntFrm, SndRstPsswrdFrm, TlTpIcn } from "./FormStyled";
+import { CrtRmFrm, Fldst, FldWthTlTp, FrmFld, HndsPrdctnFrm, Lgnd, LgnFrm, NwAccntFrm, RstPsswrdFrm, SndRstPsswrdFrm, TlTpIcn } from "./FormStyled";
 
 export const NewAccountForm = (props) => {
     return (
@@ -115,6 +115,33 @@ export const SendResetPasswordForm = (props) => {
             </Fldst>
             <SecondaryButton id="send-reset-password-button" {...props}>Enviar</SecondaryButton>
         </SndRstPsswrdFrm>
+    );
+};
+
+export const ResetPasswordForm = (props) => {
+    return (
+        <RstPsswrdFrm id="reset-password-form" onSubmit={props.onSubmit}>
+            <Lgnd id="reset-password-form-legend">{props.title}</Lgnd>
+            <Fldst id="reset-password-form-fieldset">
+                <FormFieldWithTooltip
+                    id="new-account-form-password"
+                    name="password"
+                    lText="Senha"
+                    type="password"
+                    required
+                    {...props}
+                />
+                <FormField
+                    id="new-company-form-confirmPassword"
+                    name="confirmPassword"
+                    lText="Confirme a senha"
+                    type="password"
+                    required
+                    {...props}
+                />
+            </Fldst>
+            <SecondaryButton id="reset-password-button" {...props}>Enviar</SecondaryButton>
+        </RstPsswrdFrm>
     );
 };
 

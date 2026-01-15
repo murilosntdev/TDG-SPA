@@ -26,6 +26,10 @@ export const SndRstPsswrdFrm = styled(Frm)`
     width: 40rem;
 `
 
+export const RstPsswrdFrm = styled(Frm)`
+    width: 30rem;
+`
+
 export const HndsPrdctnFrm = styled(Frm)`
     display: flex;
     flex-direction: row;

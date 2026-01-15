@@ -1,7 +1,8 @@
 import { SecondaryButton } from "../Button/Button";
 import { FormBasicInput, FormInput, InputLabel, InputSpan } from "../Input/Input";
+import { Link } from "../Link/Link";
 import { PasswordTooltip } from "../Tooltip/Tooltip";
-import { CrtRmFrm, Fldst, FldWthTlTp, FrmFld, HndsPrdctnFrm, Lgnd, LgnFrm, NwAccntFrm, TlTpIcn } from "./FormStyled";
+import { CrtRmFrm, Fldst, FldWthTlTp, FrmFld, HndsPrdctnFrm, Lgnd, LgnFrm, NwAccntFrm, SndRstPsswrdFrm, TlTpIcn } from "./FormStyled";
 
 export const NewAccountForm = (props) => {
     return (
@@ -71,6 +72,7 @@ export const LoginForm = (props) => {
                     {...props}
                 />
             </Fldst>
+            <Link id="send-password-reset-link" onClick={props.$onSendPasswordResetLinkClick}>Esqueci minha senha</Link>
             <SecondaryButton id="login-button" {...props}>Entrar</SecondaryButton>
         </LgnFrm>
     );
@@ -93,6 +95,26 @@ export const CreateRoomForm = (props) => {
             </Fldst>
             <SecondaryButton id="create-room-button" {...props}>Criar Sala</SecondaryButton>
         </CrtRmFrm>
+    );
+};
+
+export const SendResetPasswordForm = (props) => {
+    return (
+        <SndRstPsswrdFrm id="send-reset-password-form" onSubmit={props.onSubmit}>
+            <Lgnd id="send-reset-password-form-legend">{props.title}</Lgnd>
+            <Fldst id="send-reset-password-form-fieldset">
+                <FormField
+                    id="send-reset-password-form-email"
+                    name="email"
+                    lText="Email"
+                    type="email"
+                    placeholder="exemplo@email.com"
+                    required
+                    {...props}
+                />
+            </Fldst>
+            <SecondaryButton id="send-reset-password-button" {...props}>Enviar</SecondaryButton>
+        </SndRstPsswrdFrm>
     );
 };
 

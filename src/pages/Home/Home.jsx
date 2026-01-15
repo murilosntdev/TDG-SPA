@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import { useState } from "react";
 import { Footer } from "../../components/Footer/Footer";
 import { LoginForm, NewAccountForm } from "../../components/Form/Form";
@@ -7,6 +8,7 @@ import { api } from "../../services/api";
 import { Popup } from "../../components/Popup/Popup";
 import translateInputName from "../../services/inputNameTranslator"
 import { useNavigate } from "react-router-dom";
+import { SendResetPasswordModal } from "../../components/Modal/Modal";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -25,6 +27,12 @@ const Home = () => {
         password: { active: false, message: '' }
     });
     const [loginButtonLoading, setLoginButtonLoading] = useState(false);
+    const [showSendResetPasswordModal, setShowSendResetPasswordModal] = useState(false);
+    const [sendResetPasswordFormData, setSendResetPasswordFormData] = useState({});
+    const [sendResetPasswordFormInputsErrors, setSendResetPasswordFormInputsErrors] = useState({
+        email: { active: false, message: '' }
+    });
+    const [sendResetPasswordButtonLoading, setSendResetPasswordButtonLoading] = useState(false);
     const [popupStatus, setPopupStatus] = useState(false);
     const [popupInfos, setPopupInfos] = useState({
         type: '',
@@ -43,6 +51,13 @@ const Home = () => {
         const inputValue = event.target.value;
 
         setLoginFormData({ ...loginFormData, [inputName]: inputValue });
+    };
+
+    async function handleSendPasswordResetFormInputChange(event) {
+        const inputName = event.target.name;
+        const inputValue = event.target.value;
+
+        setSendResetPasswordFormData({ ...sendResetPasswordFormData, [inputName]: inputValue });
     };
 
     async function handleNewAccountFormSubmit(event) {
@@ -160,6 +175,65 @@ const Home = () => {
         };
     };
 
+    async function handleSendPasswordResetFormSubmit(event) {
+        event.preventDefault();
+
+        setSendResetPasswordFormInputsErrors({
+            email: { active: false, message: '' }
+        });
+
+        const { email } = sendResetPasswordFormData;
+
+        const data = {
+            email
+        };
+
+        setSendResetPasswordButtonLoading(true);
+
+        try {
+            await api.post('auth/password-reset', data).then(response => {
+                setSendResetPasswordButtonLoading(false);
+                closeResetPasswordModal();
+
+                setPopupInfos({ type: "success", content: "O link de recuperação de senha foi enviado para seu email com sucesso." });
+                togglePopup(true);
+
+                setSendResetPasswordFormData({
+                    email: ''
+                });
+            });
+        } catch (error) {
+            const status = error.response.data.error.status;
+            const details = error.response.data.error.details;
+
+            setSendResetPasswordButtonLoading(false);
+
+            switch (status) {
+                case 400: {
+                    setPopupInfos({ type: "danger", content: "Já existe um link de redefinição de senha ativo. Por favor, confira seu email." });
+                    togglePopup(true);
+                    closeResetPasswordModal();
+                    break;
+                };
+                case 404: {
+                    setPopupInfos({ type: "danger", content: "Não foi possível encontrar uma conta associada a esse email." });
+                    togglePopup(true);
+                    closeResetPasswordModal();
+                    break;
+                };
+                case 422: {
+                    showSendPasswordResetFormInputErrors(details);
+                    break;
+                };
+                default: {
+                    setPopupInfos({ type: "danger", content: "Não foi possível solicitar a recuperação de senha. Por favor, tente novemente mais tarde." });
+                    togglePopup(true);
+                    break;
+                };
+            };
+        };
+    };
+
     function showDiffetentPasswordsError() {
         const updatedInputsErrors = {
             username: { active: false, message: '' },
@@ -228,6 +302,22 @@ const Home = () => {
         setLoginFormInputsErrors(updatedInputsErrors);
     };
 
+    function showSendPasswordResetFormInputErrors(details) {
+        const updatedInputsErrors = {
+            email: { active: false, message: '' }
+        };
+
+        details.forEach(detail => {
+            Object.entries(detail).forEach(([key, value]) => {
+                if (key === "email") {
+                    updatedInputsErrors[key] = { ...updatedInputsErrors[key], active: true, message: value };
+                };
+            });
+        });
+
+        setSendResetPasswordFormInputsErrors(updatedInputsErrors);
+    };
+
     function show401Error(detail) {
         const updatedInputError = {
             username: { active: false, message: '' },
@@ -258,12 +348,27 @@ const Home = () => {
         setNewAccountFormInputsErrors(updatedInputsErrors);
     };
 
+    function closeResetPasswordModal() {
+        setShowSendResetPasswordModal(false);
+        setSendResetPasswordFormData({});
+        setSendResetPasswordButtonLoading(false);
+    };
+
     return (
         <S.HomePage id="home-page">
             <Navbar />
             <Popup
                 $status={popupStatus}
                 $infos={popupInfos}
+            />
+            <SendResetPasswordModal
+                show={showSendResetPasswordModal}
+                close={closeResetPasswordModal}
+                onChange={handleSendPasswordResetFormInputChange}
+                onSubmit={handleSendPasswordResetFormSubmit}
+                values={sendResetPasswordFormData}
+                inputError={sendResetPasswordFormInputsErrors}
+                loading={sendResetPasswordButtonLoading}
             />
             <S.Main id="main">
                 <S.Text id="presentation-text">
@@ -282,6 +387,7 @@ const Home = () => {
                         title="Acesse sua conta"
                         onChange={handleLoginFormInputChange}
                         onSubmit={loginFormSubmit}
+                        $onSendPasswordResetLinkClick={() => setShowSendResetPasswordModal(true)}
                         $values={loginFormData}
                         $inputsErrors={loginFormInputsErrors}
                         $loading={loginButtonLoading}

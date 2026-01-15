@@ -1,5 +1,5 @@
 import { SecondaryButton } from "../Button/Button";
-import { CreateRoomForm } from "../Form/Form";
+import { CreateRoomForm, SendResetPasswordForm } from "../Form/Form";
 import { ClsBttn, Lgnd, MdlCntinr, MdlCntnt, Ovrly, RmId, RmNm, RmPlyrs, RmsLst } from "./ModalStyled";
 
 export const CreateRoomModal = (props) => {
@@ -50,6 +50,28 @@ export const FindRoomsModal = (props) => {
                             <p>Nenhuma sala encontrada</p>
                         )}
                     </RmsLst>
+                </MdlCntnt>
+            </MdlCntinr>
+        </Ovrly>
+    );
+};
+
+export const SendResetPasswordModal = (props) => {
+    if (!props.show) return null;
+
+    return (
+        <Ovrly>
+            <MdlCntinr>
+                <ClsBttn onClick={props.close}>&times;</ClsBttn>
+                <MdlCntnt>
+                    <SendResetPasswordForm
+                        title="Informe seu e-mail para redefinição de senha"
+                        onChange={props.onChange}
+                        onSubmit={props.onSubmit}
+                        $values={props.values}
+                        $inputsErrors={props.inputError}
+                        $loading={props.loading}
+                    />
                 </MdlCntnt>
             </MdlCntinr>
         </Ovrly>
